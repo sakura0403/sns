@@ -6,47 +6,33 @@
         <div class="text-center">
             <h2 class="section-heading text-uppercase">新規投稿確認</h2>
         </div>
-        
-        <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+
+        <form action="{{ route('posts.store') }}" method="POST">
+            @csrf
             <div class="row align-items-stretch mb-5">
                 <div class="col-md-6">
                     <div class="form-group">
                         <!-- エピソード -->
-                         <h5>エピソード</h5>
-                        <input class="form-control" id="name" type="text" placeholder="エピソード" data-sb-validations="required" />
-                        <div class="invalid-feedback" data-sb-feedback="name:required">A name is required.</div>
+                        <h4>エピソード</h4>
+                        <input class="form-control" name="episode" id="name" value="{{ $request['episode'] }}" type="hidden"> <!-- 入力した値を受け取りtype="hidden"で隠す、DB保持 -->
+                        <h5 class="post-episode">{{ $request['episode'] }}</h5>  <!-- 入力した値を表示 -->
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group form-group-textarea mb-md-0">
                         <!-- 画像 -->
-                        <h5>画像</h5>
-                        <textarea class="form-control" id="message" placeholder="画像" data-sb-validations="required"></textarea>
+                        <h4>画像</h4>
+                        <textarea class="form-control" id="message"  placeholder="画像" data-sb-validations="required"></textarea>
                         <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.</div>
                     </div>
                 </div>
             </div>
-            <!-- Submit success message-->
-            <!---->
-            <!-- This is what your users will see when the form-->
-            <!-- has successfully submitted-->
-            <div class="d-none" id="submitSuccessMessage">
-                <div class="text-center text-white mb-3">
-                    <div class="fw-bolder">Form submission successful!</div>
-                    To activate this form, sign up at
-                    <br />
-                    <a href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
-                </div>
-            </div>
-            <!-- Submit error message-->
-            <!---->
-            <!-- This is what your users will see when there is-->
-            <!-- an error submitting the form-->
-            <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
-            <!-- Submit Button-->
+            
             <div class="text-center">
-                <button class="btn btn-primary btn-xl text-uppercase disabled" id="submitButton" type="submit">投稿</button>
-                <button class="btn btn-primary btn-xl text-uppercase disabled" id="submitButton" type="submit">マイページに戻る</button>
+                <!-- 投稿ボタン -->
+                <input type="submit" value="投稿" class="btn btn-primary">
+                <!-- <a href="{{ route('posts.store') }}">投稿</a> -->
+                <a href="{{ route('posts.create') }}">戻る</a>
             </div>
         </form>
     </div>

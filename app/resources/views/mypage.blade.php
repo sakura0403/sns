@@ -15,61 +15,42 @@
                         </div>
                     </div>
 
-                
-                    <div class="text-center ">
-                        <h5>フォロワー</h5>
-                        <h5>フォロー</h5>
+                    <div class="text-right"><a href="{{ route('posts.create') }}">新規投稿</a></div>
+                    <div class="text-right"><a href="{{ route('likes.index') }}">いいねした投稿</a></div>
+                    <div class="text-right"><a href="{{ route('users.edit', ['user'=>$user['id']]) }}">アカウント編集</a></div>
+                    <div class="text-right">
+                        <form style="display:inline" action="{{ route('users.destroy', ['user'=>$user['id']]) }}" method="post">
+                            @method('DELETE')
+                            @csrf
+                            <button type="submit" class="btn btn-danger ml-3" onclick="return confirm('このアカウントを削除しますか？')">アカウント削除</button>
+                        </form>
                     </div>
-                    <div class="text-right"><button class="btn btn-primary btn-xl text-uppercase disabled" id="submitButton" type="submit">新規投稿</button></div>
-                    <div class="text-right"><button class="btn btn-primary btn-xl text-uppercase disabled" id="submitButton" type="submit">アカウント編集</button></div>
-                    <div class="text-right"><button class="btn btn-primary btn-xl text-uppercase disabled" id="submitButton" type="submit">いいねした投稿</button></div>
-                
-                    <h5>ユーザー名</h5>
-                    <!-- プロフィール -->
-                    <input class="form-control" id="name" type="text" placeholder="プロフィール" >
+
+                    <!-- ユーザー名 -->
+                    <h4>{{ $user['name'] }}</h4>
+
+                    <!-- プロフィール　-->
+                    <!-- <h5>{{ $user['rememder_token'] }}</h5>  -->
 
                     <!-- 線 -->
                     <hr class="my-4" />
 
+                    @foreach($posts as $post)
                     <!-- Post preview-->
                     <div class="post-preview">
-                            <h2 class="post-episode">エピソード</h2>
-                            <h3 class="post-image">画像</h3>
+                            <h5 class="post-episode">{{ $post['episode'] }}</h5>
+                            <h5 class="post-image">画像</h5>
                         <p class="post-meta">
-                            <a href="#!">詳細へ</a>
+                            <a href="{{ route('myposts.show',['post'=>$post['id']]) }}">詳細へ</a>
                         </p>
                     </div>
                     <hr class="my-4" />
+                    @endforeach
+                    
+                    
+                   
 
-                    <!-- Post preview-->
-                    <div class="post-preview">
-                            <h2 class="post-episode">エピソード</h2>
-                            <h3 class="post-image">画像</h3>
-                        <p class="post-meta">
-                            <a href="#!">詳細へ</a>
-                        </p>
-                    </div>
-                    <hr class="my-4" />
-
-                    <!-- Post preview-->
-                    <div class="post-preview">
-                            <h2 class="post-episode">エピソード</h2>
-                            <h3 class="post-image">画像</h3>
-                        <p class="post-meta">
-                            <a href="#!">詳細へ</a>
-                        </p>
-                    </div>
-                    <hr class="my-4" />
-
-                    <!-- Post preview-->
-                    <div class="post-preview">
-                            <h2 class="post-episode">エピソード</h2>
-                            <h3 class="post-image">画像</h3>
-                        <p class="post-meta">
-                            <a href="#!">詳細へ</a>
-                        </p>
-                    </div>
-                    <hr class="my-4" />
+                   
 
                 </div>
             </div>

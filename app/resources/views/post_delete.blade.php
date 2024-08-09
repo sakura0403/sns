@@ -14,7 +14,14 @@
 
             <!-- Submit Button-->
             <div class="text-center">
-                <button class="btn btn-primary btn-xl text-uppercase disabled" id="submitButton" type="submit">削除</button>
+            <form style="display:inline" action="{{ route('posts.destroy', ['post'=>1]) }}" method="post">
+                    @method('DELETE')
+                    @csrf
+                    <button type="submit" class="btn btn-danger ml-3">
+                        {{ __('削除') }}
+                    </button>
+                </form>
+                <!-- <button class="btn btn-primary btn-xl text-uppercase disabled" id="submitButton" type="submit">削除</button> -->
                 <button class="btn btn-primary btn-xl text-uppercase disabled" id="submitButton" type="submit">編集画面に戻る</button>
         </div>
         </form>

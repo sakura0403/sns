@@ -11,10 +11,10 @@
             </div>
             <img class="img-fluid" src="assets/img/portfolio/cabin.png" alt="..." />
         </div>
-        <h5>ユーザー名</h5>
+        <h5>{{ $user['name'] }}</h5>
     </div>
         
-    <div class="text-right"><button class="btn btn-primary btn-xl text-uppercase disabled" id="submitButton" type="submit">違反報告</button></div>
+    <div class="text-right"><a href="{{ route('violations.create',[ 'post' => $post['id']]) }}">違反報告</a></div>
 
         
         <form id="contactForm" data-sb-form-api-token="API_TOKEN">
@@ -22,42 +22,38 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <!-- エピソード -->
-                        <input class="form-control" id="name" type="text" placeholder="エピソード" data-sb-validations="required" />
-                        <div class="invalid-feedback" data-sb-feedback="name:required">A name is required.</div>
+                        <h4>エピソード</h4>
+                        <h5 class="post-episode">{{ $post['episode'] }}</h5>
                     </div>
                 </div>
+
                 <div class="col-md-6">
                     <div class="form-group form-group-textarea mb-md-0">
                         <!-- 画像 -->
+                        <h4>画像</h4>
                         <textarea class="form-control" id="message" placeholder="画像" data-sb-validations="required"></textarea>
                         <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.</div>
                     </div>
                 </div>
-            </div>
-            <!-- Submit success message-->
-            <!---->
-            <!-- This is what your users will see when the form-->
-            <!-- has successfully submitted-->
-            <div class="d-none" id="submitSuccessMessage">
-                <div class="text-center text-white mb-3">
-                    <div class="fw-bolder">Form submission successful!</div>
-                    To activate this form, sign up at
-                    <br />
-                    <a href="https://startbootstrap.com/solution/contact-forms">https://startbootstrap.com/solution/contact-forms</a>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <!-- コメント -->
+                        <h4>コメント欄</h4>
+                        @foreach($comments as $comment)  <!-- 複数コメントを表示 -->
+                        <h5 class="post-comment">{{ $comment['comment'] }}</h5>
+                        @endforeach
+                    </div>
                 </div>
             </div>
-            <!-- Submit error message-->
-            <!---->
-            <!-- This is what your users will see when there is-->
-            <!-- an error submitting the form-->
-            <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
-            <!-- Submit Button-->
+
             <div class="text-center">
                 <button class="btn btn-primary btn-xl text-uppercase disabled" id="submitButton" type="submit">いいね</button>
-                <button class="btn btn-primary btn-xl text-uppercase disabled" id="submitButton" type="submit">コメント</button>
-                <button class="btn btn-primary btn-xl text-uppercase disabled" id="submitButton" type="submit">マイページに戻る</button>
+                <a href="{{ route('comments.create',[ 'post' => $post['id']]) }}">コメント</a>
+                <a href="{{ route('posts.index') }}">戻る</a>
             </div>
         </form>
+        
     </div>
 </section>
 

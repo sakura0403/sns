@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Auth;
+
+use App\Violation;
+
 class ViolationController extends Controller
 {
     /**
@@ -13,7 +17,7 @@ class ViolationController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
@@ -21,9 +25,11 @@ class ViolationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
-        //
+        return view('violation',[
+            'id' => $id,
+        ]);
     }
 
     /**
@@ -32,9 +38,17 @@ class ViolationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($id, Request $request)
     {
-        //
+        $violation = new Violation;
+        $violation->comment = $request->comment;
+        $violation->post_id = $id;
+
+        Auth::user()->violation()->save($violation);
+
+        return redirect('/');
+
+
     }
 
     /**

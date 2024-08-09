@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class LikeController extends Controller
+class MypageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +13,7 @@ class LikeController extends Controller
      */
     public function index()
     {
-        return view('post_good');
+        //
     }
 
     /**

@@ -1,68 +1,55 @@
 @extends('layouts.app')
 @section('content')
-<form class="form-subscribe" id="contactForm" data-sb-form-api-token="API_TOKEN">
-@csrf
-    <!-- マイページ -->
-        <div class="text-right"><button class="btn btn-primary btn-lg disabled" id="submitButton" type="submit">マイページ</button></div>
- </form>
+
+<!-- マイページ -->
+    <div class="text-right"><a href="{{ route('users.index') }}">マイページ</a></div>
 
 <!-- Main Content-->
 <div class="container px-4 px-lg-5">
-            <div class="row gx-4 gx-lg-5 justify-content-center">
-                <div class="col-md-10 col-lg-11 col-xl-7">
-                    <!-- 検索 -->
-                    <div class="row">
-                        <div class="col">
-                            <input class="form-control form-control-lg" id="emailAddress" type="search" placeholder="検索内容入力" data-sb-validations="required,email" />
-                        </div>
-                        <div class="col-auto"><button class="btn btn-primary btn-lg disabled" id="submitButton" type="submit">検索</button></div>
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-md-10 col-lg-11 col-xl-7">
+            
+            <!-- 検索 -->
+                <!-- <form class="row">
+                    <div class="col">
+                        <input class="form-control form-control-lg" type="search" name="search"  value="{{request('search')}}" placeholder="キーワードを入力" aria-label="検索...">
                     </div>
+                    <input class="btn btn-primary btn-lg disabled" type="submit" value="検索" >
+                </form> -->
 
-                    <!-- 線 -->
-                    <hr class="my-4" />
-
-                    <!-- Post preview-->
-                    <div class="post-preview">
-                            <h2 class="post-episode">エピソード</h2>
-                            <h3 class="post-image">画像</h3>
-                        <p class="post-meta">
-                            <a href="#!">詳細へ</a>
-                        </p>
+                <form class="row" action="{{ route('posts.search') }}" method="POST">
+                @csrf
+                    <div class="col">
+                        <input class="form-control form-control-lg" type="text" name="keyword" value="{{ $keyword }}" placeholder="キーワード" >
                     </div>
-                    <hr class="my-4" />
-
-                    <!-- Post preview-->
-                    <div class="post-preview">
-                            <h2 class="post-episode">エピソード</h2>
-                            <h3 class="post-image">画像</h3>
-                        <p class="post-meta">
-                            <a href="#!">詳細へ</a>
-                        </p>
+                    <div class="col">
+                        <input class="form-control form-control-lg" type="text" name="account" value="{{ $account }}" placeholder="ユーザー名" >
                     </div>
-                    <hr class="my-4" />
-
-                    <!-- Post preview-->
-                    <div class="post-preview">
-                            <h2 class="post-episode">エピソード</h2>
-                            <h3 class="post-image">画像</h3>
-                        <p class="post-meta">
-                            <a href="#!">詳細へ</a>
-                        </p>
+                    <div class="col">
+                        <input class="form-control form-control-lg" type="text"  placeholder="日付" >
                     </div>
-                    <hr class="my-4" />
+                    <input class="btn btn-primary btn-lg disabled" type="submit" value="検索">
+                </form>
+            
 
-                    <!-- Post preview-->
-                    <div class="post-preview">
-                            <h2 class="post-episode">エピソード</h2>
-                            <h3 class="post-image">画像</h3>
-                        <p class="post-meta">
-                            <a href="#!">詳細へ</a>
-                        </p>
-                    </div>
-                    <hr class="my-4" />
+            <!-- 線 -->
+            <hr class="my-4" />
 
-                </div>
+            @foreach($posts as $post)
+            <!-- Post preview-->
+            <div class="post-preview">
+                    <h5 class="post-episode">{{ $post['episode'] }}</h5>
+                    <h5 class="post-image">画像</h5>
+                <p class="post-meta">
+                    <a href="{{ route('posts.show',['post'=>$post['id']]) }}">詳細へ</a>
+                </p>
             </div>
+            <hr class="my-4" />
+            @endforeach
+            
+
         </div>
+    </div>
+ </div>
 
 @endsection

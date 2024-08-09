@@ -14,8 +14,8 @@
 
             <!-- Submit Button-->
             <div class="text-center">
-                <button class="btn btn-primary btn-xl text-uppercase disabled" id="submitButton" type="submit">削除</button>
-                <button class="btn btn-primary btn-xl text-uppercase disabled" id="submitButton" type="submit">編集画面に戻る</button>
+                <a href="{{ route('users.destroy', ['user'=>0]) }}">削除</a>
+                <a href="{{ route('users.edit', ['user'=>0]) }}">編集画面に戻る</a>
             </div>
         </form>
     </div>
