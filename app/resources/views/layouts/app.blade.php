@@ -12,6 +12,12 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
 
+    <!-- Ajax -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -20,6 +26,14 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
+
+    <!-- css -->
+    <style>
+        .loved i {
+            color: red !important;
+        }
+    </style>
+
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
@@ -76,5 +90,50 @@
             @yield('content')
         </main>
     </div>
+
+    <!-- Ajaxの処理 -->
+    <script>
+        $(function () {
+            // console.log('読み込み');
+            var like = $('.js-like-toggle');
+            var likePostId;
+
+            like.on('click', function () {
+
+                var $this = $(this);
+                likePostId = $this.data('postid');
+                $.ajax({
+                    headers: {  
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')  //Laravelでajaxを利用するためには必ずCSRFトークンを設定する
+                    },
+                    url: '/ajaxlike',  //routeの記述
+                    type: 'POST', //受け取り方法の記述（GETもある）
+                    data: {
+                        'post_id': likePostId  //コントローラーの$requestに値が渡されるので、$request->post_idのようにすれば渡した値を使うことができる
+                    },
+                })
+
+                // Ajaxリクエストが成功した場合
+                .done(function (data) {
+                    //lovedクラスを追加
+                    $this.toggleClass('loved'); 
+                    //.likesCountの次の要素のhtmlを「data.postLikesCount」の値に書き換える
+                    $this.next('.likesCount').html(data.postLikesCount); 
+                })
+
+                // Ajaxリクエストが失敗した場合
+                .fail(function (data, xhr, err) {
+                    //ここの処理はエラーが出た時にエラー内容をわかるようにしておく。
+                    //とりあえず下記のように記述しておけばエラー内容が詳しくわかります。笑
+                    console.log('エラー');
+                    console.log(err);
+                    console.log(xhr);
+                });
+    
+                return false;
+            });
+        });
+    </script>
+
 </body>
 </html>

@@ -4,7 +4,7 @@
 <section class="page-section" id="contact">
     <div class="container">
 
-        <form style="display:inline" action="{{ route('posts.destroy', ['post'=>$post['id']]) }}" method="post">
+        <form style="display:inline" action="{{ route('posts.destroy', ['post'=>$post['id']]) }}" method="post" enctype="multipart/form-data">
             @method('DELETE')
             @csrf    
             <div class="text-right">
@@ -13,6 +13,7 @@
             </div>
 
             <div class="row align-items-stretch mb-5">
+
                 <div class="col-md-6">
                     <div class="form-group">
                         <!-- エピソード -->
@@ -20,15 +21,22 @@
                          <h5 class="post-episode">{{ $post['episode'] }}</h5>
                     </div>
                 </div>
+
                 <div class="col-md-6">
                     <div class="form-group form-group-textarea mb-md-0">
                         <!-- 画像 -->
+                        @if(!empty($post['image']))
                         <h4>画像</h4>
-                        <textarea class="form-control" id="message"   placeholder="画像" data-sb-validations="required"></textarea>
-                        <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.</div>
+                        <img src="{{ asset('img/' . $post['id'] . '/' . $post['image']) }}" hight=200 width=200>
+                        @endif
                     </div>
                 </div>
+
             </div>
+            
+            <!-- 線 -->
+            <hr class="my-4" />
+            
             <div class="col-md-6">
                 <div class="form-group">
                     <!-- コメント -->

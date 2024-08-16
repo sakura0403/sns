@@ -102,6 +102,30 @@ class UserController extends Controller
 
         $user = Auth::user();
 
+        $image = $request->file('image');
+        if($image){
+            // レコードを挿入したときのIDを取得
+            $lastInsertedId = $user->id;
+
+            if (!file_exists(public_path() . "/img/" . $lastInsertedId)) {
+                mkdir(public_path() . "/img/" . $lastInsertedId, 0777);
+            }
+    
+            $imageName = $request->file('image')->getClientOriginalName();
+            $extension = $request->file('image')->getClientOriginalExtension();
+
+            $newImageName = pathinfo($imageName, PATHINFO_FILENAME) . "_" . uniqid() . "." . $extension;
+
+            // imgフォルダに上記の画像ファイルを移動する
+            $request->file('image')->move(public_path() . "/img/". $lastInsertedId , $newImageName);
+        
+        }else{
+            $newImageName = NULL;
+        }
+    
+
+        $user->image = $newImageName;
+
         $user->name = $request->name;
         $user->email = $request->email;
 

@@ -10,26 +10,23 @@
         <div class="col-md-10 col-lg-11 col-xl-7">
             
             <!-- 検索 -->
-                <!-- <form class="row">
-                    <div class="col">
-                        <input class="form-control form-control-lg" type="search" name="search"  value="{{request('search')}}" placeholder="キーワードを入力" aria-label="検索...">
-                    </div>
-                    <input class="btn btn-primary btn-lg disabled" type="submit" value="検索" >
-                </form> -->
-
-                <form class="row" action="{{ route('posts.search') }}" method="POST">
-                @csrf
-                    <div class="col">
-                        <input class="form-control form-control-lg" type="text" name="keyword" value="{{ $keyword }}" placeholder="キーワード" >
-                    </div>
-                    <div class="col">
-                        <input class="form-control form-control-lg" type="text" name="account" value="{{ $account }}" placeholder="ユーザー名" >
-                    </div>
-                    <div class="col">
-                        <input class="form-control form-control-lg" type="text"  placeholder="日付" >
-                    </div>
-                    <input class="btn btn-primary btn-lg disabled" type="submit" value="検索">
-                </form>
+            <form class="row" action="{{ route('posts.search') }}" method="POST">
+            @csrf
+                <!-- エピソード検索 -->
+                <div class="col">
+                    <input class="form-control form-control-lg" type="text" name="keyword" value="{{ $keyword }}" placeholder="キーワード" >
+                </div>
+                <!-- ユーザー検索 -->
+                <div class="col">
+                    <input class="form-control form-control-lg" type="text" name="account" value="{{ $account }}" placeholder="ユーザー名" >
+                </div>
+                <!-- 投稿日検索 -->
+                <div class="col">
+                    <input class="form-control form-control-lg" type="date" name="date" value="{{ $date }}" >
+                </div>
+                <!-- 検索ボタン -->
+                <input class="btn btn-primary btn-lg disabled" type="submit" value="検索">
+            </form>
             
 
             <!-- 線 -->
@@ -39,7 +36,9 @@
             <!-- Post preview-->
             <div class="post-preview">
                     <h5 class="post-episode">{{ $post['episode'] }}</h5>
-                    <h5 class="post-image">画像</h5>
+                    @if(!empty($post['image']))
+                    <img src="{{ asset('img/' . $post['id'] . '/' . $post['image']) }}" hight=200 width=200>
+                    @endif
                 <p class="post-meta">
                     <a href="{{ route('posts.show',['post'=>$post['id']]) }}">詳細へ</a>
                 </p>

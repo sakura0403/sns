@@ -15,11 +15,15 @@ class DisplayController extends Controller
 
         $keyword = '';
         $account = '';
+        $date = '';
 
         return view('main',[
             'posts' => $posts,
             'keyword' => $keyword,
             'account' => $account,
+            'date' => $date,
+
+
         ]);
     }
 }

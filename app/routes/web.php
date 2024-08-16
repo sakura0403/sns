@@ -41,3 +41,5 @@ Route::get('violations/create/{post}', 'ViolationController@create')->name('viol
 Route::post('violations/store/{post}', 'ViolationController@store')->name('violations.store');
 Route::post('posts/search', 'PostController@search')->name('posts.search');
 
+
+Route::post('ajaxlike', 'PostController@ajaxlike')->name('posts.ajaxlike');

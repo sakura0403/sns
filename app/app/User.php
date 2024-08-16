@@ -8,6 +8,8 @@ use Illuminate\Notifications\Notifiable;
 
 use Illuminate\Database\Eloquent\SoftDeletes;  //論理削除追記
 
+
+
 class User extends Authenticatable
 {
     use SoftDeletes;  //論理削除追記
@@ -53,6 +55,8 @@ class User extends Authenticatable
         return $this->hasMany('App\Violation');
     }
 
-
+    public function like(){
+        return $this->hasMany('App\Like');
+    }
 
 }

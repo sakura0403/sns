@@ -4,6 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Auth;
+
+use App\User;
+use App\Post;
+use App\Like;
+
 class LikeController extends Controller
 {
     /**
@@ -13,7 +19,13 @@ class LikeController extends Controller
      */
     public function index()
     {
-        return view('post_good');
+        // $like = new Like;
+        
+        $posts = Auth::user()->like()->with('post')->get();
+
+        return view('post_good',[
+            'posts' => $posts,
+        ]);
     }
 
     /**
@@ -36,6 +48,8 @@ class LikeController extends Controller
     {
         //
     }
+
+
 
     /**
      * Display the specified resource.
@@ -79,6 +93,6 @@ class LikeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
     }
 }

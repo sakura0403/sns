@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Post;
 use App\Comment;
 use App\User;
+use App\Like;
 
 class PostController extends Controller
 {
@@ -27,27 +28,35 @@ class PostController extends Controller
     public function search(Request $request)
     {
         $keyword = $request->input('keyword');
-        $post = new Post;
+        $date = $request->input('date');
+        $posts = new Post;
         
         $account = $request->input('account');
         $user = new User;
 
+
         if(!empty($keyword)) {
-            $posts = $post->where('episode', 'LIKE', "%{$keyword}%")->get();
-        }else{
-            $posts = $post->all()->toArray();
+            $posts = $posts->where('episode', 'LIKE', "%{$keyword}%");
         }
 
         if(!empty($account)) {
-            $user = $user->where('name', 'LIKE', "%{$account}%")->get();
-        }else{
-            $user = $user->all()->toArray();
+            $posts = $posts->whereHas('user', function ($query) use ($account) {
+                $query->where('name', 'LIKE', "%{$account}%");
+            });
         }
 
+        if(!empty($date)) {
+            $posts = $posts->whereDate('created_at', '=', $date);
+        }
+
+        $posts = $posts->get();
+
+        
         return view('main', [
-            'keyword' => $keyword,
             'posts' => $posts,
+            'keyword' => $keyword,
             'account' => $account,
+            'date' => $date,
         ]);
 
     }
@@ -67,8 +76,38 @@ class PostController extends Controller
 
     public function confilm(Request $request)
     {
+        $post = new Post;
+
+        $image = $request->file('image');
+        if($image){
+            // 画像
+            // 拡張子つきでアップロードされた画像のファイル名を取得  getClientOriginalName:ファイル名を取得
+            $imageName = $request->file('image')->getClientOriginalName();
+
+            // 拡張子だけの変数（jpg、pngなど）を定義  getClientOriginalExtension:ファイルの拡張子を取得
+            $extension = $request->file('image')->getClientOriginalExtension();
+
+            // pathinfo = 拡張子名やファイル名を取得 / uniqid = 唯一の値(ユニークID)を生成する関数
+            // PATHINFO_FILENAME = 拡張子なしのファイル名 (フラッグを指定することでその他にもディレクトリ、拡張子、拡張子ありのファイル名だけを返す事ができる)
+            // 取得したファイル名から唯一無二の新しいファイル名を生成（形式：元のファイル名_ランダムの英数字.拡張子）
+            $newImageName = pathinfo($imageName, PATHINFO_FILENAME) . "_" . uniqid() . "." . $extension; 
+
+            // file('image') → type="file" name="image" /　move → 画像の格納 / public_path()."/img/tmp" → ファイル
+            // tmpフォルダに上記の画像ファイルを移動する
+            $request->file('image')->move(public_path() . "/img/tmp", $newImageName);
+            $image = "/img/tmp/" . $newImageName;
+
+        }else{
+            $newImageName = NULL;
+        }
+
+
         return view('post_confilm',[
             'request' => $request,
+            'post' => $post,
+            
+            'image'        => $image,
+            'newImageName' => $newImageName,
         ]);
     }
 
@@ -81,11 +120,33 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        // DBにデータを保存、INSERT処理
         $post = new Post;
         $post->episode = $request->episode;
+        $post->image = $request->image;
 
-        // ログイン中のユーザー(Auth::user)が持つ -> 投稿データ(post)として -> 入力値を保存(save(データ))
         Auth::user()->post()->save($post);  
+
+        $image = $request->file('image');
+        if($image){
+            // 画像
+            // レコードを挿入したときのIDを取得 (新しく$post->idができあがった情報のみ処理が進む)
+            $lastInsertedId = $post->id;
+
+            // ディレクトリを作成、public/imgの配下に名前のidと同じフォルダを生成
+            if (!file_exists(public_path() . "/img/" . $lastInsertedId)) { // file_exists = ファイルまたはディレクトリが存在するかどうか調べる
+                mkdir(public_path() . "/img/" . $lastInsertedId, 0777); // mkdir = ディレクトリを作成
+            }
+
+            // 一時保存から本番の格納場所へ移動、tmpフォルダから上記のフォルダへ移動  rename = ファイルを上書きコピー
+            rename(public_path() . "/img/tmp/" . $request->image , public_path() . "/img/" . $lastInsertedId . "/" . $request->image); // $request->image = $newImageName
+        
+            // 一時保存の画像を削除、tmpフォルダを空にする
+            \File::cleanDirectory(public_path() . "/img/tmp"); // cleanDirectory = 指定されたパスのものを削除
+
+        }else{
+            $newImageName = NULL;
+        }
 
         return redirect()->route('users.index');
     }
@@ -101,38 +162,77 @@ class PostController extends Controller
     {
         // 各詳細表示
         $post = new Post;
-        $post = $post -> find($id);  // find() 指定したキーの要素だけ取得
+        $post = $post -> withCount('likes') -> with('user') -> find($id);  // withCount('テーブル名')で、リレーションの数を取得
+
 
         // 各詳細のコメント表示
         $comment = new Comment;
         // SELECT * FROM comments WHERE post_id = $id; -> 取得 get()
         $comments = $comment -> where('post_id','=',$id)->get();
 
-        // $user = new User;
-        // $user = $user -> where($id,'=','name')->get();
-        $user = Auth::user();
-
+        // いいね機能
+        $like_model = new Like;
 
         return view('post_detail',[
             'post' => $post,
             'comments' => $comments,
-            'user' => $user,
+            'user' => $post->user,
+
+            'like_model' => $like_model,
         ]);
     }
 
+    // いいね機能
+    public function ajaxlike(Request $request)
+    {
+        $id = Auth::user()->id;
+        $post_id = $request->post_id;
+        $like = new Like;
+        $post = Post::findOrFail($post_id); // findOrFail() 一致するidが見つからなかった場合、エラーを返す (404 | Not Found)
+        
 
-    public function myshow($id)
+        // 空でない（既にいいねしている）なら
+        if ($like->like_exist($id, $post_id)) {  // like_exist() ファイルまたはディレクトリが存在するかチェック
+            //likesテーブルのレコードを削除
+            $like = Like::where('post_id', $post_id)->where('user_id', $id)->delete();
+        } else {
+            //空（まだ「いいね」していない）ならlikesテーブルに新しいレコードを作成する
+            $like = new Like;
+            $like->post_id = $request->post_id;
+            $like->user_id = Auth::user()->id;
+            $like->save();
+        }
+        //loadCount() リレーションの数を○○_countという形で取得できる（今回の場合はいいねの総数）
+        $postLikesCount = $post->loadCount('likes')->likes_count;
+
+        //一つの変数にajaxに渡す値をまとめる
+        $json = [
+            'postLikesCount' => $postLikesCount,
+        ];
+        //下記の記述でajaxに引数の値を返す
+        return response()->json($json);
+    }
+
+
+    
+
+
+    public function myshow($id, Request $request)
     {
         $post = new Post;
-        $post = $post -> find($id);
+        $post = $post -> find($id);  // find() 指定したキーの要素だけ取得
 
         $comment = new Comment;
         $comments = $comment -> where('post_id','=',$id)->get();
 
+        $user = Auth::user();
+        
+        
         return view('mypost_detail',[
             'post' => $post,
             'comments' => $comments,
             'user' => $user,
+
         ]);
     }
     
@@ -143,7 +243,7 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request,$id)
     {
         $post = new Post;
         $post = $post->find($id);
@@ -166,7 +266,30 @@ class PostController extends Controller
         $post = new Post;
         $post = $post->find($id);  // 1.モデルから対象とするカラムを抽出する
 
+        $image = $request->file('image');
+        if($image){
+            // レコードを挿入したときのIDを取得
+            $lastInsertedId = $post->id;
+
+            if (!file_exists(public_path() . "/img/" . $lastInsertedId)) {
+                mkdir(public_path() . "/img/" . $lastInsertedId, 0777);
+            }
+    
+            $imageName = $request->file('image')->getClientOriginalName();
+            $extension = $request->file('image')->getClientOriginalExtension();
+
+            $newImageName = pathinfo($imageName, PATHINFO_FILENAME) . "_" . uniqid() . "." . $extension;
+
+            // imgフォルダに上記の画像ファイルを移動する
+            $request->file('image')->move(public_path() . "/img/". $lastInsertedId , $newImageName);
+        
+        }else{
+            $newImageName = NULL;
+        }
+    
+
         $post->episode = $request->episode;  // 2.更新するカラムに値を代入
+        $post->image = $newImageName;
 
         $post->save();  // 3.saveを実行 保存
 

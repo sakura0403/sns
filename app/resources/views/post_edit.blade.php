@@ -7,7 +7,7 @@
             <h2 class="section-heading text-uppercase">投稿編集</h2>
         </div>
         
-        <form action="{{ route('posts.update', ['post'=>$post['id']]) }}" method="POST">
+        <form action="{{ route('posts.update', ['post'=>$post['id']]) }}" method="POST" enctype="multipart/form-data">
                     @method('PUT')
                     @csrf
             <div class="row align-items-stretch mb-5">
@@ -22,8 +22,10 @@
                     <div class="form-group form-group-textarea mb-md-0">
                         <!-- 画像 -->
                         <h5>画像</h5>
-                        <textarea class="form-control" id="message" placeholder="画像" data-sb-validations="required"></textarea>
-                        <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.</div>
+                        <input type="file" name="image">
+                        @if(!empty($post['image']))
+                        <img src="{{ asset('img/' . $post['id'] . '/' . $post['image']) }}" hight=200 width=200>
+                        @endif
                     </div>
                 </div>
             </div>           

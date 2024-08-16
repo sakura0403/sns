@@ -7,7 +7,7 @@
             <h2 class="section-heading text-uppercase">アカウント編集</h2>
         </div>
 
-        <form action="{{ route('users.update',['user'=>$user['id']]) }}" method="POST">
+        <form action="{{ route('users.update',['user'=>$user['id']]) }}" method="POST" enctype="multipart/form-data">
         @method('PUT')
         @csrf
             <div id="contactForm" data-sb-form-api-token="API_TOKEN">
@@ -27,8 +27,7 @@
                         <div class="form-group">
                             <!-- アイコン -->
                             <h5>アイコン</h5>
-                            <input  name="image" id="name" type="file">
-                            <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.</div>
+                            <input name="image" type="file">
                         </div>
                         <div class="form-group">
                             <!-- プロフィール -->

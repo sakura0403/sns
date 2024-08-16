@@ -7,7 +7,9 @@
             <h2 class="section-heading text-uppercase">新規投稿</h2>
         </div>
         
-        <form action="{{ route('posts.confilm') }}" method="POST">
+        <!-- enctyp = HTTPリクエストのパラメータが変化し、画像やファイルなど添付してデータを取得することができる -->
+        <!-- <input type=”file”>タグを使用する場合は、必ずformタグに「enctype=”multipart/form-data」を付け足す -->
+        <form action="{{ route('posts.confilm') }}" method="POST" enctype="multipart/form-data"> 
             @csrf
             <div class="row align-items-stretch mb-5">
                 <div class="col-md-6">
@@ -20,9 +22,8 @@
                 <div class="col-md-6">
                     <div class="form-group"> 
                         <!-- 画像 -->
-                         <h4>画像</h4>
-                        <input  name="image" id="name" type="file" placeholder="画像" data-sb-validations="required" />
-                        <div class="invalid-feedback" data-sb-feedback="name:required">A name is required.</div>
+                        <h4>画像</h4>
+                        <input type="file" name="image" >
                     </div>
                 </div>
             </div>

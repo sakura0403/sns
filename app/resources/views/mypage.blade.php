@@ -5,15 +5,14 @@
 <div class="container px-4 px-lg-5">
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-md-10 col-lg-11 col-xl-7">
+
+
                     <!-- アイコン -->
-                    <div class="col-md-6 col-lg-4 mb-5">
-                        <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal1">
-                            <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                                <div class="portfolio-item-caption-content text-center text-white"><i class="fas fa-plus fa-3x"></i></div>
-                            </div>
-                            <img class="img-fluid" src="assets/img/portfolio/cabin.png" alt="..." />
-                        </div>
-                    </div>
+                    @if(!empty($user['image']))
+                    <img src="{{ asset('img/' . $user['id'] . '/' . $user['image']) }}" hight=100 width=100>
+                    @else
+                    <img src="img/user/free.png" hight=100 width=100>
+                    @endif
 
                     <div class="text-right"><a href="{{ route('posts.create') }}">新規投稿</a></div>
                     <div class="text-right"><a href="{{ route('likes.index') }}">いいねした投稿</a></div>
@@ -29,8 +28,6 @@
                     <!-- ユーザー名 -->
                     <h4>{{ $user['name'] }}</h4>
 
-                    <!-- プロフィール　-->
-                    <!-- <h5>{{ $user['rememder_token'] }}</h5>  -->
 
                     <!-- 線 -->
                     <hr class="my-4" />
@@ -39,7 +36,9 @@
                     <!-- Post preview-->
                     <div class="post-preview">
                             <h5 class="post-episode">{{ $post['episode'] }}</h5>
-                            <h5 class="post-image">画像</h5>
+                            @if(!empty($post['image']))
+                            <img src="{{ asset('img/' . $post['id'] . '/' . $post['image']) }}" hight=200 width=200>
+                            @endif
                         <p class="post-meta">
                             <a href="{{ route('myposts.show',['post'=>$post['id']]) }}">詳細へ</a>
                         </p>
