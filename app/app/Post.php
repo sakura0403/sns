@@ -21,6 +21,11 @@ class Post extends Model
         return $this->hasMany('App\Like');
     }
 
+    public function violation()
+    {
+        return $this->hasMany('App\Violation');
+    }
+
 }
 
 

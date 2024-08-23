@@ -16,6 +16,7 @@ use App\Http\Controllers\DisplayController;
 
 Auth::routes();
 Route::get('/',[DisplayController::class, 'index']);
+Route::get('/admin',[DisplayController::class, 'adminindex'])->name('display.adminindex');
 
 // Route::get('/', 'DisplayController@index');
 

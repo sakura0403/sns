@@ -31,32 +31,27 @@ class PostController extends Controller
         $date = $request->input('date');
         $posts = new Post;
         
-        $account = $request->input('account');
-        $user = new User;
+        $user = Auth::user()->post()->get();
 
 
         if(!empty($keyword)) {
-            $posts = $posts->where('episode', 'LIKE', "%{$keyword}%");
-        }
-
-        if(!empty($account)) {
-            $posts = $posts->whereHas('user', function ($query) use ($account) {
-                $query->where('name', 'LIKE', "%{$account}%");
+            $posts = $posts->where('episode', 'LIKE', "%{$keyword}%")->orWhereHas('user', function ($query) use ($keyword) {
+                $query->where('name', 'LIKE', "%{$keyword}%");
             });
         }
 
         if(!empty($date)) {
-            $posts = $posts->whereDate('created_at', '=', $date);
+            $posts = $posts->whereDate('created_at', '>=', $date); // 指定日= 以前<= 以降>= 
         }
 
-        $posts = $posts->get();
+        $posts = $posts->orderBy('id', 'DESC')->get();  // ->orderBy('id', 'DESC')->get() 降順(新しいものが上)
 
         
         return view('main', [
             'posts' => $posts,
             'keyword' => $keyword,
-            'account' => $account,
             'date' => $date,
+            'user' => $user,
         ]);
 
     }
@@ -128,7 +123,8 @@ class PostController extends Controller
         Auth::user()->post()->save($post);  
 
         $image = $request->file('image');
-        if($image){
+
+        if(!empty($post['image'])){
             // 画像
             // レコードを挿入したときのIDを取得 (新しく$post->idができあがった情報のみ処理が進む)
             $lastInsertedId = $post->id;
@@ -139,7 +135,7 @@ class PostController extends Controller
             }
 
             // 一時保存から本番の格納場所へ移動、tmpフォルダから上記のフォルダへ移動  rename = ファイルを上書きコピー
-            rename(public_path() . "/img/tmp/" . $request->image , public_path() . "/img/" . $lastInsertedId . "/" . $request->image); // $request->image = $newImageName
+            rename(public_path() . "/img/tmp/" . $request -> image , public_path() . "/img/" . $lastInsertedId . "/" . $request->image); // $request->image = $newImageName
         
             // 一時保存の画像を削除、tmpフォルダを空にする
             \File::cleanDirectory(public_path() . "/img/tmp"); // cleanDirectory = 指定されたパスのものを削除
@@ -147,7 +143,7 @@ class PostController extends Controller
         }else{
             $newImageName = NULL;
         }
-
+        
         return redirect()->route('users.index');
     }
 
@@ -168,7 +164,7 @@ class PostController extends Controller
         // 各詳細のコメント表示
         $comment = new Comment;
         // SELECT * FROM comments WHERE post_id = $id; -> 取得 get()
-        $comments = $comment -> where('post_id','=',$id)->get();
+        $comments = $comment -> where('post_id','=',$id)->orderBy('id', 'DESC')->get();  // ->orderBy('id', 'DESC')->get() 降順(新しいものが上)
 
         // いいね機能
         $like_model = new Like;
@@ -282,14 +278,13 @@ class PostController extends Controller
 
             // imgフォルダに上記の画像ファイルを移動する
             $request->file('image')->move(public_path() . "/img/". $lastInsertedId , $newImageName);
+
+            $post->image = $newImageName;
         
-        }else{
-            $newImageName = NULL;
         }
     
-
         $post->episode = $request->episode;  // 2.更新するカラムに値を代入
-        $post->image = $newImageName;
+
 
         $post->save();  // 3.saveを実行 保存
 

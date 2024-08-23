@@ -3,6 +3,9 @@
 
 <section class="page-section" id="contact">
     <div class="container">
+
+    <div class="float-right"><a href="{{ route('violations.create',[ 'post' => $post['id']]) }}" class="btn-primary btn-lg ml-3">違反報告</a></div>
+
     <!-- アイコン -->
     @if(!empty($user['image']))
     <img src="{{ asset('img/' . $user['id'] . '/' . $user['image']) }}" hight=80 width=80>
@@ -12,7 +15,6 @@
     <!-- ユーザー名 -->
     <h5>{{ $user['name'] }}</h5>
         
-    <div class="text-right"><a href="{{ route('violations.create',[ 'post' => $post['id']]) }}">違反報告</a></div>
 
         
     <form id="contactForm" data-sb-form-api-token="API_TOKEN">
@@ -66,8 +68,8 @@
             </p>
             @endif
 
-            <a href="{{ route('comments.create',[ 'post' => $post['id']]) }}">コメント</a>
-            <a href="{{ route('posts.index') }}">戻る</a>
+            <a href="{{ route('comments.create',[ 'post' => $post['id']]) }}" class="btn-primary btn-lg ml-3">コメント</a>
+            <a href="{{ route('posts.index') }}" class="btn-primary btn-lg ml-3">戻る</a>
         </div>
     </form>
     

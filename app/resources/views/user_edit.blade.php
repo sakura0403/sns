@@ -4,7 +4,7 @@
 <section class="page-section" id="contact">
     <div class="container">
         <div class="text-center">
-            <h2 class="section-heading text-uppercase">アカウント編集</h2>
+            <h2>アカウント編集</h2>
         </div>
 
         <form action="{{ route('users.update',['user'=>$user['id']]) }}" method="POST" enctype="multipart/form-data">
@@ -29,20 +29,16 @@
                             <h5>アイコン</h5>
                             <input name="image" type="file">
                         </div>
-                        <div class="form-group">
-                            <!-- プロフィール -->
-                            <!-- <h5>プロフィール</h5> -->
-                            <!-- <input class="form-control" name="rememder_token" id="name" type="text" value="{{ $user['rememder_token'] }}" > -->
-                        </div>
+
                     </div>
                 </div>
             
                 <div class="text-center">
                
-                    <button type="submit" class="btn btn-primary ml-3" name='action' value='add'>登録</button>
+                    <button type="submit" class="btn btn-primary btn-lg ml-3" name='action' value='add'>登録</button>
                     <!-- <a href="{{ route('users.update',['user'=>0]) }}">登録</a>  -->
                 
-                    <a href="{{ route('users.index') }}">マイページへ戻る</a>
+                    <a href="{{ route('users.index') }}" class="btn-primary btn-lg ml-3">マイページへ戻る</a>
                 </div>
             </div>
         </form>

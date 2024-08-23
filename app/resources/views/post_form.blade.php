@@ -29,8 +29,8 @@
             </div>
             
             <div class="text-center">
-                <button type="submit" class="btn btn-primary ml-3" name='action' value='add'>確認画面へ</button>
-                <a href="{{ route('users.index') }}">マイページに戻る</a>
+                <button type="submit" class="btn btn-primary btn-lg ml-3" name='action' value='add'>確認画面へ</button>
+                <a href="{{ route('users.index') }}" class="btn-primary btn-lg ml-3">マイページに戻る</a>
             </div>
 
         </form>

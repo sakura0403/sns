@@ -18,11 +18,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        // $post = new Post;
-        // $posts = $post->all()->toArray();
-
         // ログイン中のユーザー(Auth::user)が持つ -> 投稿データ(post)として -> 入力値を保存(save(データ))
-        $posts = Auth::user()->post()->get();
+        $posts = Auth::user()->post()->orderBy('id', 'DESC')->get();  // ->orderBy('id', 'DESC')->get() 降順(新しいものが上)
 
         // ログイン中のユーザー(Auth::user)
         $user = Auth::user();
@@ -119,12 +116,12 @@ class UserController extends Controller
             // imgフォルダに上記の画像ファイルを移動する
             $request->file('image')->move(public_path() . "/img/". $lastInsertedId , $newImageName);
         
-        }else{
-            $newImageName = NULL;
+            $user->image = $newImageName;
+
         }
     
 
-        $user->image = $newImageName;
+        // $user->image = $newImageName;
 
         $user->name = $request->name;
         $user->email = $request->email;

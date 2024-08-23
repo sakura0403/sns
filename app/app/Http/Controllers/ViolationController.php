@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Violation;
+use App\Post;
 
 class ViolationController extends Controller
 {
@@ -93,6 +94,12 @@ class ViolationController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = new Post;
+        $posts = $post->find($id);
+
+        $posts->delete();  // deleteを実行 削除 (この場合は物理削除)
+        // 論理削除の場合はマイグレーションファイルを修正し、deleted_atカラムを追加 → softDeletes()を使用できるようにモデルで宣言)
+        
+        return redirect()->route('display.adminindex');    
     }
 }

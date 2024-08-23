@@ -21,7 +21,7 @@ class LikeController extends Controller
     {
         // $like = new Like;
         
-        $posts = Auth::user()->like()->with('post')->get();
+        $posts = Auth::user()->like()->with('post')->orderBy('id', 'DESC')->get();  // ->orderBy('id', 'DESC')->get() 降順(新しいものが上)
 
         return view('post_good',[
             'posts' => $posts,

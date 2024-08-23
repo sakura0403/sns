@@ -32,8 +32,8 @@
             
             <div class="text-center">
                 <!-- 投稿ボタン -->
-                <input type="submit" value="投稿" class="btn btn-primary">
-                <a href="{{ route('posts.create') }}">戻る</a>
+                <input type="submit" value="投稿" class="btn btn-primary btn-lg ml-3">
+                <a href="{{ route('posts.create') }}" class="btn-primary btn-lg ml-3">戻る</a>
             </div>
         </form>
     </div>

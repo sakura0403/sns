@@ -22,7 +22,7 @@
                     <div class="form-group form-group-textarea mb-md-0">
                         <!-- 画像 -->
                         <h5>画像</h5>
-                        <input type="file" name="image">
+                        <div class="form-group"><input type="file" name="image"></div>
                         @if(!empty($post['image']))
                         <img src="{{ asset('img/' . $post['id'] . '/' . $post['image']) }}" hight=200 width=200>
                         @endif
@@ -31,10 +31,10 @@
             </div>           
 
             <div class="text-center">
-                    <button type="submit" class="btn btn-primary ml-3" name='action' value='add'>投稿</button>
+                    <button type="submit" class="btn btn-primary btn-lg ml-3" name='action' value='add'>投稿</button>
                  
                     <!-- <a href="{{ route('posts.update', ['post'=>0]) }}">投稿</a> -->
-                    <a href="{{ route('myposts.show',['post'=>$post['id']]) }}">戻る</a>
+                    <a href="{{ route('myposts.show',['post'=>$post['id']]) }}" class="btn-primary btn-lg ml-3">戻る</a>
             </div>
 
         </form>

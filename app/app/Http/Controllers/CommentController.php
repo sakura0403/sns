@@ -46,7 +46,11 @@ class CommentController extends Controller
 
         Auth::user()->comment()->save($comment);
 
-        return redirect('/',);
+        $post = new Post;
+        $post = $post -> withCount('likes') -> with('user') -> find($id);  // withCount('テーブル名')で、リレーションの数を取得
+
+
+        return redirect()->route('posts.show',['id' => $post]);
     }
 
     /**

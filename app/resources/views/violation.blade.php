@@ -23,8 +23,8 @@
             
             <div class="text-center">
                 
-                    <button type="submit" class="btn btn-primary ml-3" name='action' value='add'>投稿</button>
-                <a href="{{ route( 'posts.show',['post'=>$id] ) }}">詳細へ戻る</a>
+                    <button type="submit" class="btn btn-primary ml-3 btn-lg" name='action' value='add'>投稿</button>
+                <a href="{{ route( 'posts.show',['post'=>$id] ) }}" class="btn-primary btn-lg ml-3">詳細へ戻る</a>
             </div>
 
         </form>

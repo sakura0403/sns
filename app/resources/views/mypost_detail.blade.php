@@ -8,8 +8,8 @@
             @method('DELETE')
             @csrf    
             <div class="text-right">
-                <a href="{{ route('posts.edit', ['post'=>$post['id']]) }}">投稿編集</a>
-                <button type="submit" class="btn btn-danger ml-3" onclick="return confirm('この投稿を削除しますか？')">削除</button>
+                <a href="{{ route('posts.edit', ['post'=>$post['id']]) }}" class="btn-primary btn-lg">投稿編集</a>
+                <button type="submit" class="btn btn-danger ml-3 " onclick="return confirm('この投稿を削除しますか？')">削除</button>
             </div>
 
             <div class="row align-items-stretch mb-5">
@@ -25,8 +25,8 @@
                 <div class="col-md-6">
                     <div class="form-group form-group-textarea mb-md-0">
                         <!-- 画像 -->
-                        @if(!empty($post['image']))
                         <h4>画像</h4>
+                        @if(!empty($post['image']))
                         <img src="{{ asset('img/' . $post['id'] . '/' . $post['image']) }}" hight=200 width=200>
                         @endif
                     </div>
@@ -47,7 +47,7 @@
                 </div>
             </div>
         </form>   
-            <div class="text-center"><a href="{{ route('users.index') }}">マイページに戻る</a></div>
+            <div class="text-center"><a href="{{ route('users.index') }}" class="btn-primary btn-lg">マイページに戻る</a></div>
     </div>
 </section>
 
