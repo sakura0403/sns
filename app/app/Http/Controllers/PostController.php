@@ -31,13 +31,21 @@ class PostController extends Controller
         $keyword = $request->input('keyword');
         $date = $request->input('date');
         $posts = new Post;
+
         
+        // if(!empty($keyword)) {
+        //     $posts = $posts->where('episode', 'LIKE', "%{$keyword}%")
+        //                    ->orWhereHas('user', function ($query) use ($keyword) {
+        //                         $query->where('name', 'LIKE', "%{$keyword}%");
+        //                     });
+        // }
 
-
-
-        if(!empty($keyword)) {
-            $posts = $posts->where('episode', 'LIKE', "%{$keyword}%")->orWhereHas('user', function ($query) use ($keyword) {
-                $query->where('name', 'LIKE', "%{$keyword}%");
+        if (!empty($keyword)) {
+            $posts = $posts->where(function ($query) use ($keyword) {
+                $query->where('episode', 'LIKE', "%{$keyword}%") // 'episode' フィールドにキーワードが含まれる投稿を検索
+                      ->orWhereHas('user', function ($query) use ($keyword) {
+                          $query->where('name', 'LIKE', "%{$keyword}%"); // 関連するユーザーの 'name' フィールドにキーワードが含まれる投稿を検索
+                      });
             });
         }
 
