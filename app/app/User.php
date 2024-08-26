@@ -59,4 +59,15 @@ class User extends Authenticatable
         return $this->hasMany('App\Like');
     }
 
+    // リレーション先の削除
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($user) {
+            // ソフトデリートを適用
+            $user->post()->delete();
+        });
+    }
+
 }

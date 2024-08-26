@@ -22,15 +22,19 @@ Route::get('/admin',[DisplayController::class, 'adminindex'])->name('display.adm
 
 
 // リソースコントローラーのルーティング記述
-Route::resource('users', 'UserController');
-Route::resource('posts', 'PostController');
-Route::resource('likes', 'LikeController');
+Route::group(['middleware' => 'auth'], function(){
+    Route::resource('users', 'UserController');
+    Route::resource('posts', 'PostController');
+    Route::resource('likes', 'LikeController');
+});
+
+
 Route::resource('comments', 'CommentController')->except([
     'create', 'store' // except=create,storeは除く  only=create,storeはのみ
 ]);
 Route::resource('violations', 'ViolationController')->except([
     'create', 'store' // create,storeは除く
-]);;
+]);
 
 
 // ターミナルのURI,Name追加変更

@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Comment;
 
+use App\Http\Requests\CreateDate;
+
 class CommentController extends Controller
 {
     /**
@@ -38,7 +40,7 @@ class CommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($id, Request $request)
+    public function store($id, CreateDate $request)
     {
         $comment = new Comment;
         $comment->comment = $request->comment;
@@ -46,11 +48,11 @@ class CommentController extends Controller
 
         Auth::user()->comment()->save($comment);
 
-        $post = new Post;
-        $post = $post -> withCount('likes') -> with('user') -> find($id);  // withCount('テーブル名')で、リレーションの数を取得
+        // $post = new Post;
+        // $post = $post -> withCount('likes') -> with('user') -> find($id);  // withCount('テーブル名')で、リレーションの数を取得
 
 
-        return redirect()->route('posts.show',['id' => $post]);
+        return redirect()->route('posts.show',['post' => $id]);
     }
 
     /**

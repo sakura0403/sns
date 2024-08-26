@@ -3,9 +3,22 @@
 
 <section class="page-section" id="contact">
     <div class="container">
+
+        <!-- バリデーション -->
+        <div class='panel-body'>
+            @if($errors->any())
+            <div class='alert alert-danger'>
+                <ul>
+                    @foreach($errors->all() as $message)
+                    <li>{{ $message }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+        </div>
         
         <form action="{{ route( 'comments.store',['post'=>$id] ) }}" method="POST">
-                    @csrf
+            @csrf
         
             <div class="row align-items-stretch mb-5">
                 <div class="col-md-6">

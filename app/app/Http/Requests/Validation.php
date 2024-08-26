@@ -4,16 +4,16 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateDate extends FormRequest
+class Validation extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize() // 現ログインユーザーがこのリクエストを実行する権限があるか否か
+    public function authorize()
     {
-        return true; // false 403エラー
+        return true;
     }
 
     /**
@@ -21,10 +21,10 @@ class CreateDate extends FormRequest
      *
      * @return array
      */
-    public function rules() // 各入力フォームへのルールを記述
+    public function rules()
     {
         return [
-            'comment' => 'required',
+            'episode' => 'required',
         ];
     }
 }

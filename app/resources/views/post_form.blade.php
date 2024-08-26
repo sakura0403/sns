@@ -6,6 +6,19 @@
         <div class="text-center">
             <h2 class="section-heading text-uppercase">新規投稿</h2>
         </div>
+
+        <!-- バリデーション -->
+        <div class='panel-body'>
+            @if($errors->any())
+            <div class='alert alert-danger'>
+                <ul>
+                    @foreach($errors->all() as $message)
+                    <li>{{ $message }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+        </div>
         
         <!-- enctyp = HTTPリクエストのパラメータが変化し、画像やファイルなど添付してデータを取得することができる -->
         <!-- <input type=”file”>タグを使用する場合は、必ずformタグに「enctype=”multipart/form-data」を付け足す -->

@@ -6,6 +6,19 @@
         <div class="text-center">
             <h2 class="section-heading text-uppercase">投稿編集</h2>
         </div>
+
+        <!-- バリデーション -->
+        <div class='panel-body'>
+            @if($errors->any())
+            <div class='alert alert-danger'>
+                <ul>
+                    @foreach($errors->all() as $message)
+                    <li>{{ $message }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+        </div>
         
         <form action="{{ route('posts.update', ['post'=>$post['id']]) }}" method="POST" enctype="multipart/form-data">
                     @method('PUT')

@@ -6,11 +6,12 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 
-
 use App\Post;
 use App\Comment;
 use App\User;
 use App\Like;
+
+use App\Http\Requests\Validation;
 
 class PostController extends Controller
 {
@@ -31,7 +32,7 @@ class PostController extends Controller
         $date = $request->input('date');
         $posts = new Post;
         
-        $user = Auth::user()->post()->get();
+
 
 
         if(!empty($keyword)) {
@@ -51,7 +52,6 @@ class PostController extends Controller
             'posts' => $posts,
             'keyword' => $keyword,
             'date' => $date,
-            'user' => $user,
         ]);
 
     }
@@ -69,7 +69,7 @@ class PostController extends Controller
     }
 
 
-    public function confilm(Request $request)
+    public function confilm(Validation $request)
     {
         $post = new Post;
 
@@ -257,7 +257,7 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Validation $request, $id)
     {
         $post = new Post;
         $post = $post->find($id);  // 1.モデルから対象とするカラムを抽出する

@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Violation;
 use App\Post;
 
+use App\Http\Requests\CreateDate;
+
 class ViolationController extends Controller
 {
     /**
@@ -39,7 +41,7 @@ class ViolationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($id, Request $request)
+    public function store($id, CreateDate $request)
     {
         $violation = new Violation;
         $violation->comment = $request->comment;

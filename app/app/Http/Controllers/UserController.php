@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Post;
 use App\User;
 
+use App\Http\Requests\UserValidation;
+
+
 class UserController extends Controller
 {
     /**
@@ -92,7 +95,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserValidation $request, $id)
     {
         // $user = new User;
         // $user = $user->find($id);
@@ -144,6 +147,6 @@ class UserController extends Controller
         $user = $user->find($id);
 
         $user->delete();
-        return redirect()->route('users.index');
+        return redirect('/');
     }
 }

@@ -7,6 +7,19 @@
             <h2>アカウント編集</h2>
         </div>
 
+        <!-- バリデーション -->
+        <div class='panel-body'>
+            @if($errors->any())
+            <div class='alert alert-danger'>
+                <ul>
+                    @foreach($errors->all() as $message)
+                    <li>{{ $message }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+        </div>
+
         <form action="{{ route('users.update',['user'=>$user['id']]) }}" method="POST" enctype="multipart/form-data">
         @method('PUT')
         @csrf

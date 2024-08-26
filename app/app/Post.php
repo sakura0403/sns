@@ -21,6 +21,17 @@ class Post extends Model
         return $this->hasMany('App\Like');
     }
 
+    // リレーション先の削除
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($post) {
+            // ソフトデリートを適用
+            $post->likes()->delete();
+        });
+    }
+
     public function violation()
     {
         return $this->hasMany('App\Violation');
