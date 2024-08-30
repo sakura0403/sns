@@ -32,7 +32,7 @@ class PostController extends Controller
         $date = $request->input('date');
         $posts = new Post;
 
-        
+
         // if(!empty($keyword)) {
         //     $posts = $posts->where('episode', 'LIKE', "%{$keyword}%")
         //                    ->orWhereHas('user', function ($query) use ($keyword) {
@@ -42,10 +42,10 @@ class PostController extends Controller
 
         if (!empty($keyword)) {
             $posts = $posts->where(function ($query) use ($keyword) {
-                $query->where('episode', 'LIKE', "%{$keyword}%") // 'episode' フィールドにキーワードが含まれる投稿を検索
-                      ->orWhereHas('user', function ($query) use ($keyword) {
-                          $query->where('name', 'LIKE', "%{$keyword}%"); // 関連するユーザーの 'name' フィールドにキーワードが含まれる投稿を検索
-                      });
+                $query->where('episode', 'LIKE', "%{$keyword}%") 
+                      ->orWhereHas('user', function ($query) use ($keyword) { // whereHas リレーション先のテーブルの条件で検索したいときに使用
+                          $query->where('name', 'LIKE', "%{$keyword}%"); 
+                        });
             });
         }
 

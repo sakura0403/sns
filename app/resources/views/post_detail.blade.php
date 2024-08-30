@@ -47,6 +47,7 @@
                     <!-- コメント -->
                     <h4>コメント欄</h4>
                     @foreach($comments as $comment)  <!-- 複数コメントを表示 -->
+                    <h6>{{ $comment['user']['name'] }}</h6>
                     <h5 class="post-comment">{{ $comment['comment'] }}</h5>
                     @endforeach
                 </div>
